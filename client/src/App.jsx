@@ -1,14 +1,29 @@
 import { useState } from 'react';
 import TeacherDashboard from './components/TeacherDashboard';
 import StudentPortal from './components/StudentPortal';
+import Login from './components/Login';
 import './App.css';
 
 function App() {
-  const [userRole, setUserRole] = useState('student'); // 'teacher' or 'student'
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [user, setUser] = useState('');
+  const [role, setRole] = useState('student');
 
-  const handleRoleSwitch = (role) => {
-    setUserRole(role);
+  const handleLogin = (username, selectedRole) => {
+    setUser(username);
+    setRole(selectedRole);
+    setLoggedIn(true);
   };
+
+  const handleLogout = () => {
+    setLoggedIn(false);
+    setUser('');
+    setRole('student');
+  };
+
+  if (!loggedIn) {
+    return <Login onLogin={handleLogin} />;
+  }
 
   return (
     <div className="app-container">
@@ -16,20 +31,14 @@ function App() {
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
         <div className="container-fluid">
           <span className="navbar-brand mb-0 h1">
-            <i className="bi bi-book-half me-2"></i>E-Test System
+            <i className="bi bi-book-half me-2"></i>E-Test System - {user} ({role})
           </span>
           <div className="d-flex gap-2">
             <button
-              className={`btn ${userRole === 'teacher' ? 'btn-primary' : 'btn-outline-primary'}`}
-              onClick={() => handleRoleSwitch('teacher')}
+              className="btn btn-outline-danger"
+              onClick={handleLogout}
             >
-              <i className="bi bi-person-workspace me-2"></i>Teacher
-            </button>
-            <button
-              className={`btn ${userRole === 'student' ? 'btn-success' : 'btn-outline-success'}`}
-              onClick={() => handleRoleSwitch('student')}
-            >
-              <i className="bi bi-person-check me-2"></i>Student
+              <i className="bi bi-box-arrow-right me-2"></i>Logout
             </button>
           </div>
         </div>
@@ -37,7 +46,7 @@ function App() {
 
       {/* Main Content */}
       <main className="main-content">
-        {userRole === 'teacher' ? (
+        {role === 'teacher' ? (
           <TeacherDashboard />
         ) : (
           <StudentPortal />
