@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { getExamById, submitExamAnswers } from '../api/examService';
+import QuestionView from './QuestionView';
 
 export const StudentPortal = () => {
   const [examId, setExamId] = useState('');
@@ -7,6 +8,8 @@ export const StudentPortal = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [answers, setAnswers] = useState({});
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [answerSavedMessage, setAnswerSavedMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [submittedResult, setSubmittedResult] = useState(null);
   const [studentName, setStudentName] = useState('');
@@ -28,6 +31,8 @@ export const StudentPortal = () => {
       const exam = await getExamById(examId);
       setCurrentExam(exam);
       setAnswers({});
+      setCurrentQuestionIndex(0);
+      setAnswerSavedMessage('');
       setSubmitted(false);
       setSubmittedResult(null);
     } catch (err) {
@@ -43,6 +48,20 @@ export const StudentPortal = () => {
       ...answers,
       [questionId]: optionIndex
     });
+    setAnswerSavedMessage('Answer saved');
+  };
+
+  const handlePrevQuestion = () => {
+    setAnswerSavedMessage('');
+    setCurrentQuestionIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+  };
+
+  const handleNextQuestion = () => {
+    if (!currentExam) {
+      return;
+    }
+    setAnswerSavedMessage('');
+    setCurrentQuestionIndex((prevIndex) => Math.min(prevIndex + 1, currentExam.questions.length - 1));
   };
 
   const handleSubmitExam = async () => {
@@ -158,41 +177,31 @@ export const StudentPortal = () => {
 
         <div className="card shadow-lg">
           <div className="card-body">
-            {currentExam.questions.map((question, index) => (
-              <div key={question.id} className="mb-4 pb-4 border-bottom">
-                <div className="mb-3">
-                  <h5>
-                    Question {index + 1} of {currentExam.questions.length}
-                  </h5>
-                  <p className="lead">{question.question}</p>
-                  <small className={`badge bg-${question.difficulty === 'easy' ? 'success' : question.difficulty === 'medium' ? 'warning' : 'danger'}`}>
-                    {question.difficulty.charAt(0).toUpperCase() + question.difficulty.slice(1)} Difficulty
-                  </small>
-                </div>
+            <QuestionView
+              question={currentExam.questions[currentQuestionIndex]}
+              questionNumber={currentQuestionIndex + 1}
+              totalQuestions={currentExam.questions.length}
+              selectedOption={answers[currentQuestionIndex]}
+              onSelectOption={(optionIndex) => handleAnswerChange(currentQuestionIndex, optionIndex)}
+              message={answerSavedMessage}
+            />
 
-                <div className="options">
-                  {question.options.map((option, optionIndex) => (
-                    <div key={optionIndex} className="form-check mb-2">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name={`question_${question.id}`}
-                        id={`question_${question.id}_option_${optionIndex}`}
-                        value={optionIndex}
-                        checked={answers[index] === optionIndex}
-                        onChange={() => handleAnswerChange(index, optionIndex)}
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor={`question_${question.id}_option_${optionIndex}`}
-                      >
-                        {option}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
+            <div className="d-flex justify-content-between mb-4">
+              <button
+                className="btn btn-outline-primary"
+                onClick={handlePrevQuestion}
+                disabled={currentQuestionIndex === 0}
+              >
+                <i className="bi bi-arrow-left me-2"></i>Previous
+              </button>
+              <button
+                className="btn btn-outline-primary"
+                onClick={handleNextQuestion}
+                disabled={currentQuestionIndex === currentExam.questions.length - 1}
+              >
+                Next<i className="bi bi-arrow-right ms-2"></i>
+              </button>
+            </div>
           </div>
         </div>
 
