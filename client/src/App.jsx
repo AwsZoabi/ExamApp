@@ -1,122 +1,60 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState } from 'react';
+import TeacherDashboard from './components/TeacherDashboard';
+import StudentPortal from './components/StudentPortal';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [userRole, setUserRole] = useState('student'); // 'teacher' or 'student'
+
+  const handleRoleSwitch = (role) => {
+    setUserRole(role);
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="app-container">
+      {/* Navigation Bar */}
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div className="container-fluid">
+          <span className="navbar-brand mb-0 h1">
+            <i className="bi bi-book-half me-2"></i>E-Test System
+          </span>
+          <div className="d-flex gap-2">
+            <button
+              className={`btn ${userRole === 'teacher' ? 'btn-primary' : 'btn-outline-primary'}`}
+              onClick={() => handleRoleSwitch('teacher')}
+            >
+              <i className="bi bi-person-workspace me-2"></i>Teacher
+            </button>
+            <button
+              className={`btn ${userRole === 'student' ? 'btn-success' : 'btn-outline-success'}`}
+              onClick={() => handleRoleSwitch('student')}
+            >
+              <i className="bi bi-person-check me-2"></i>Student
+            </button>
+          </div>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
+      </nav>
+
+      {/* Main Content */}
+      <main className="main-content">
+        {userRole === 'teacher' ? (
+          <TeacherDashboard />
+        ) : (
+          <StudentPortal />
+        )}
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-dark text-white text-center py-4 mt-5">
+        <div className="container-fluid">
+          <p className="mb-0">
+            E-Test System v1.0 | Designed for Educational Assessment | Ready for Backend Integration
           </p>
+          <small className="text-muted">Mock API in use - Ready for Node.js backend</small>
         </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      </footer>
+    </div>
+  );
 }
 
-export default App
+export default App;
