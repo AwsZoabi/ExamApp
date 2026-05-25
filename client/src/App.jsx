@@ -1,68 +1,124 @@
 import { useState } from 'react';
-import TeacherDashboard from './components/TeacherDashboard';
-import StudentPortal from './components/StudentPortal';
-import Login from './components/Login';
+import { Link, Navigate, Route, Routes } from 'react-router-dom';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import StudentDashboard from './pages/StudentDashboard';
+import { authService } from './services/authService';
 import './App.css';
 
-function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [user, setUser] = useState('');
-  const [role, setRole] = useState('student');
+function TeacherPlaceholder({ user }) {
+  return (
+    <div className="container py-4">
+      <h1>Teacher Dashboard</h1>
+      <p className="text-muted">
+        Welcome {user.fullName}. Teacher pages will be completed by the next teammate.
+      </p>
 
-  const handleLogin = (username, selectedRole) => {
-    setUser(username);
-    setRole(selectedRole);
-    setLoggedIn(true);
+      <div className="alert alert-warning">
+        This section is prepared for Project 2 continuation: create exams,
+        manage questions, view students, and check results.
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [currentUser, setCurrentUser] = useState(authService.getCurrentUser());
+
+  const handleLogin = (user) => {
+    setCurrentUser(user);
   };
 
   const handleLogout = () => {
-    setLoggedIn(false);
-    setUser('');
-    setRole('student');
+    authService.logout();
+    setCurrentUser(null);
   };
 
-  if (!loggedIn) {
-    return <Login onLogin={handleLogin} />;
-  }
-
   return (
-    <div className="app-container">
-      {/* Navigation Bar */}
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-        <div className="container-fluid">
-          <span className="navbar-brand mb-0 h1">
-            <i className="bi bi-book-half me-2"></i>E-Test System - {user} ({role})
-          </span>
-          <div className="d-flex gap-2">
-            <button
-              className="btn btn-outline-danger"
-              onClick={handleLogout}
-            >
-              <i className="bi bi-box-arrow-right me-2"></i>Logout
-            </button>
+    <>
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div className="container">
+          <Link className="navbar-brand" to="/">
+            E-Test System
+          </Link>
+
+          <div className="d-flex align-items-center gap-2">
+            {currentUser ? (
+              <>
+                <span className="text-white small">
+                  {currentUser.fullName} ({currentUser.role})
+                </span>
+                <button className="btn btn-outline-light btn-sm" onClick={handleLogout}>
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link className="btn btn-outline-light btn-sm" to="/login">
+                  Login
+                </Link>
+                <Link className="btn btn-success btn-sm" to="/register">
+                  Register
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </nav>
 
-      {/* Main Content */}
-      <main className="main-content">
-        {role === 'teacher' ? (
-          <TeacherDashboard />
-        ) : (
-          <StudentPortal />
-        )}
-      </main>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            currentUser ? (
+              currentUser.role === 'student' ? (
+                <Navigate to="/student" />
+              ) : (
+                <Navigate to="/teacher" />
+              )
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
 
-      {/* Footer */}
-      <footer className="bg-dark text-white text-center py-4 mt-5">
-        <div className="container-fluid">
-          <p className="mb-0">
-            E-Test System v1.0 | Designed for Educational Assessment | Ready for Backend Integration
-          </p>
-          <small className="text-muted">Mock API in use - Ready for Node.js backend</small>
-        </div>
-      </footer>
-    </div>
+        <Route
+          path="/login"
+          element={
+            currentUser ? <Navigate to="/" /> : <Login onLogin={handleLogin} />
+          }
+        />
+
+        <Route
+          path="/register"
+          element={
+            currentUser ? <Navigate to="/" /> : <Register onLogin={handleLogin} />
+          }
+        />
+
+        <Route
+          path="/student"
+          element={
+            currentUser && currentUser.role === 'student' ? (
+              <StudentDashboard user={currentUser} />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+
+        <Route
+          path="/teacher"
+          element={
+            currentUser && currentUser.role === 'teacher' ? (
+              <TeacherPlaceholder user={currentUser} />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+      </Routes>
+    </>
   );
 }
 
