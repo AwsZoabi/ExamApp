@@ -24,6 +24,36 @@ export const mockDb = {
       durationMinutes: 45,
       status: 'Open',
       description: 'Basic questions about React components, props, and state.',
+      questions: [
+        {
+          id: 1,
+          text: 'What is a React component?',
+          answers: [
+            'A reusable UI building block',
+            'A database table',
+            'A CSS file',
+            'A server only function',
+          ],
+          correctAnswerIndex: 0,
+        },
+        {
+          id: 2,
+          text: 'Which hook is used to manage state in React?',
+          answers: ['useRoute', 'useState', 'useServer', 'useHTML'],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 3,
+          text: 'What are props used for?',
+          answers: [
+            'Passing data to components',
+            'Deleting files',
+            'Changing the browser',
+            'Creating a database',
+          ],
+          correctAnswerIndex: 0,
+        },
+      ],
     },
     {
       id: 102,
@@ -32,6 +62,20 @@ export const mockDb = {
       durationMinutes: 60,
       status: 'Open',
       description: 'Questions about variables, arrays, functions, and objects.',
+      questions: [
+        {
+          id: 1,
+          text: 'Which keyword declares a variable?',
+          answers: ['table', 'let', 'style', 'page'],
+          correctAnswerIndex: 1,
+        },
+        {
+          id: 2,
+          text: 'What type is an array in JavaScript?',
+          answers: ['object', 'number', 'boolean', 'css'],
+          correctAnswerIndex: 0,
+        },
+      ],
     },
     {
       id: 103,
@@ -40,6 +84,19 @@ export const mockDb = {
       durationMinutes: 30,
       status: 'Closed',
       description: 'Short quiz about HTML structure and CSS styling.',
+      questions: [
+        {
+          id: 1,
+          text: 'What does HTML stand for?',
+          answers: [
+            'HyperText Markup Language',
+            'HighText Machine Language',
+            'Home Tool Markup Language',
+            'Hyperlink Text Manager',
+          ],
+          correctAnswerIndex: 0,
+        },
+      ],
     },
   ],
 

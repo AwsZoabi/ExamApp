@@ -31,6 +31,7 @@ export const examService = {
       durationMinutes: Number(examData.durationMinutes),
       status: examData.status,
       description: examData.description,
+      questions: [],
     };
 
     mockDb.exams.push(newExam);
@@ -75,6 +76,47 @@ export const examService = {
     loggerService.info('Exam deleted', deletedExam);
 
     return deletedExam;
+  },
+
+  async submitExam(examId, studentId, answers) {
+    await delay(300);
+
+    const exam = mockDb.exams.find((item) => item.id === Number(examId));
+
+    if (!exam) {
+      throw new Error('Exam not found');
+    }
+
+    let correctAnswers = 0;
+
+    exam.questions.forEach((question) => {
+      if (answers[question.id] === question.correctAnswerIndex) {
+        correctAnswers++;
+      }
+    });
+
+    const score =
+      exam.questions.length === 0
+        ? 0
+        : Math.round((correctAnswers / exam.questions.length) * 100);
+
+    const newGrade = {
+      id: Date.now(),
+      studentId: Number(studentId),
+      examId: Number(examId),
+      score,
+      date: new Date().toISOString().split('T')[0],
+    };
+
+    mockDb.grades.push(newGrade);
+    loggerService.info('Exam submitted', newGrade);
+
+    return {
+      score,
+      correctAnswers,
+      totalQuestions: exam.questions.length,
+      grade: newGrade,
+    };
   },
 
   async getGradesSummary() {

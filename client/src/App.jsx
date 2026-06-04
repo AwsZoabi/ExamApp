@@ -6,6 +6,7 @@ import StudentDashboard from './pages/StudentDashboard';
 import TeacherDashboard from './pages/TeacherDashboard';
 import CreateExam from './pages/CreateExam';
 import EditExam from './pages/EditExam';
+import TakeExam from './pages/TakeExam';
 import { authService } from './services/authService';
 import { configService } from './services/configService';
 import './App.css';
@@ -102,6 +103,17 @@ function App() {
           element={
             currentUser && currentUser.role === 'student' ? (
               <StudentDashboard user={currentUser} />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+
+        <Route
+          path="/student/exam/:id"
+          element={
+            currentUser && currentUser.role === 'student' ? (
+              <TakeExam user={currentUser} />
             ) : (
               <Navigate to="/login" />
             )
