@@ -1,0 +1,55 @@
+name: examapp-final-prod
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?Set POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER:?Set POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+    networks: [examapp-network]
+
+  server:
+    image: ${DOCKERHUB_USERNAME:?Set DOCKERHUB_USERNAME}/examapp-server:${IMAGE_TAG:-latest}
+    pull_policy: always
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      SERVER_PORT: 4000
+      DATA_SOURCE: postgres
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      DATABASE_SSL: disable
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-8h}
+      ALLOW_TEACHER_REGISTRATION: "false"
+      CORS_ORIGIN: ${PUBLIC_CLIENT_ORIGIN:?Set PUBLIC_CLIENT_ORIGIN}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks: [examapp-network]
+
+  client:
+    image: ${DOCKERHUB_USERNAME:?Set DOCKERHUB_USERNAME}/examapp-client:${IMAGE_TAG:-latest}
+    pull_policy: always
+    restart: unless-stopped
+    ports:
+      - "${CLIENT_PORT:-8080}:80"
+    depends_on:
+      - server
+    networks: [examapp-network]
+
+volumes:
+  postgres_data:
+
+networks:
+  examapp-network:
+    driver: bridge

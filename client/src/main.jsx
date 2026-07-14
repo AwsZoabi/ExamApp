@@ -1,14 +1,23 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './index.css';
-import App from './App.jsx';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter, HashRouter } from 'react-router-dom';
+import App from './App';
+import { appConfig } from './config';
+import './styles.css';
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+const routerElement =
+  appConfig.routerMode === 'hash' ? (
+    <HashRouter>
+      <App />
+    </HashRouter>
+  ) : (
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </React.StrictMode>
+  );
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    {routerElement}
+  </StrictMode>,
 );
