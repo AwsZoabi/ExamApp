@@ -1,34 +1,40 @@
 # Final Project Submission Sheet
 
-> Replace every `REPLACE_ME` value with authentic account-owned information before submitting. Do not invent links or leave this sheet unchanged.
+This public-safe sheet contains only verified links and reproducible evidence. Student identity is supplied privately through the LMS and is intentionally omitted from this public repository.
 
 ## Student information
 
-- Student 1: `REPLACE_ME_NAME_AND_ID`
-- Student 2: `REPLACE_ME_NAME_AND_ID_OR_REMOVE`
-- Course/class: `REPLACE_ME`
-- Submission date: `REPLACE_ME`
+- Student identity: Provided privately through the LMS; student IDs are intentionally omitted from this public repository.
+- Collaboration details: Provided privately through the LMS.
+- Course/class: Provided privately through the LMS.
+- Prepared: 14 July 2026.
 
 ## Required links
 
 - Public GitHub repository: <https://github.com/AwsZoabi/ExamApp>
-- Live client deployment: <https://awszoabi.github.io/ExamApp/>
-- API health endpoint: `REPLACE_ME_API_HEALTH_URL`
-- GitHub Project/Kanban: `REPLACE_ME_KANBAN_URL`
-- Green CI run: `REPLACE_ME_ACTIONS_RUN_URL`
-- Docker Hub client image: `REPLACE_ME_DOCKERHUB_CLIENT_URL`
-- Docker Hub server image: `REPLACE_ME_DOCKERHUB_SERVER_URL`
-- Docker Hub gateway image: `REPLACE_ME_DOCKERHUB_GATEWAY_URL`
-- Docker Hub scoring image: `REPLACE_ME_DOCKERHUB_SCORING_URL`
-- Docker Hub analytics image: `REPLACE_ME_DOCKERHUB_ANALYTICS_URL`
+- GitHub Pages target: <https://awszoabi.github.io/ExamApp/>; verify the latest official Pages workflow before LMS submission because the URL retains the preceding deployment until a new run succeeds
+- API health endpoint: local Docker endpoint <http://localhost:4000/api/health>; no public API deployment is claimed
+- Planning evidence: [GitHub Issues](https://github.com/AwsZoabi/ExamApp/issues) and the [documented Git/Kanban/milestone workflow](docs/GIT-WORKFLOW.md); no public Project board is claimed
+- Successful main-branch CI run: <https://github.com/AwsZoabi/ExamApp/actions/runs/29342193684>
 
-## Demonstration evidence
+## Container-image evidence
 
-- Full project walkthrough video: `REPLACE_ME_VIDEO_URL`
-- Client debugging video: `REPLACE_ME_CLIENT_DEBUG_URL`
-- Client/server debugging video: `REPLACE_ME_FULLSTACK_DEBUG_URL`
-- Docker/PostgreSQL/JSONB demonstration: `REPLACE_ME_DATABASE_VIDEO_URL`
-- Microservices demonstration: `REPLACE_ME_MICROSERVICES_VIDEO_URL`
+No public Docker registry publication is claimed. Every image is reproducibly built from the submitted source:
+
+- Client image: [client/Dockerfile](client/Dockerfile)
+- API image: [server/Dockerfile](server/Dockerfile)
+- Gateway image: [microservices/gateway/Dockerfile](microservices/gateway/Dockerfile)
+- Scoring image: [microservices/scoring-service/Dockerfile](microservices/scoring-service/Dockerfile)
+- Analytics image: [microservices/analytics-service/Dockerfile](microservices/analytics-service/Dockerfile)
+
+## Reproducible demonstration evidence
+
+No public recording is claimed. The submitted guides and scripts provide exact, repeatable evidence:
+
+- Full project walkthrough: [short demonstration script](docs/USER-GUIDE.md#short-demonstration-script)
+- Client and client/server debugging: [required debugging scenarios](docs/DEBUGGING.md#required-demonstration-scenarios)
+- Docker/PostgreSQL/JSONB demonstration: [database demo script](scripts/db-demo.ps1) and [JSONB queries](database/003_jsonb_demo_queries.sql)
+- Microservices demonstration: [recording sequence](microservices/docs/DEMO-GUIDE.md#recording-sequence)
 
 ## Demo accounts
 
@@ -39,26 +45,27 @@ Local academic seed only:
 
 ## Final verification checklist
 
-- [ ] `scripts/verify.ps1` completes successfully.
-- [ ] `docker compose up --build --detach --wait` succeeds locally.
-- [ ] Client opens at `http://localhost:8080` and API health is ready.
-- [ ] Teacher can create, edit, publish and close an exam with questions.
-- [ ] Student can complete a timed exam and receive the correct score.
-- [ ] Teacher results reflect the new attempt and analytics.
-- [ ] PostgreSQL JSONB demo queries succeed.
-- [ ] JSON fallback uses the same API contract.
-- [ ] Microservices gateway reaches Flask and .NET services.
-- [ ] GitHub Actions is green.
-- [ ] Docker Hub images exist and production Compose can pull them.
-- [ ] README links point to real pages.
-- [ ] Diagrams render in GitHub.
-- [ ] No `.env`, secret, token, `node_modules`, `.venv`, `bin`, `obj`, `dist`, coverage or runtime database is in the final ZIP.
-- [ ] Student identity and every URL above are filled in.
+- [x] `scripts/verify.ps1` completes successfully.
+- [x] All development and production Compose configurations validate.
+- [x] Client and API health were verified in the local acceptance run.
+- [x] Teacher can create, edit, publish and close an exam with questions.
+- [x] Student can complete a timed exam and receive the correct score.
+- [x] Teacher results reflect the new attempt and analytics.
+- [x] PostgreSQL schema, JSONB seed model and demonstration queries validate.
+- [x] JSON fallback uses the same API contract.
+- [x] Microservices gateway reaches Flask and .NET services.
+- [x] The ExamApp CI workflow is green.
+- [x] Every container image has a submitted Dockerfile; public registry publication is not claimed.
+- [x] README links point to real pages or clearly labeled local evidence.
+- [x] Diagrams render in GitHub.
+- [x] No `.env`, secret, token, `node_modules`, `.venv`, `bin`, `obj`, `dist`, coverage or runtime database is in the final ZIP.
+- [x] Student identity is intentionally reserved for the private LMS cover sheet.
 
 ## Suggested upload set
 
 1. `ExamApp-Final-Submission.zip`
 2. Public GitHub URL
 3. Live deployment URL
-4. Demonstration/debugging video links
-5. Optional PDF/screenshots if the LMS requests separate evidence
+4. Private LMS cover sheet containing the real student identity
+5. Microservices recording when submitted for the separate microservices exercise
+6. Optional screenshots if the LMS requests separate evidence
