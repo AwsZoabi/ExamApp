@@ -6,14 +6,14 @@ ExamApp covers the full assessment lifecycle: secure role-based access, question
 
 ## Submission links
 
-Verified account-owned project links:
+Verified public links and reproducible local evidence:
 
 - GitHub: <https://github.com/AwsZoabi/ExamApp>
 - Live client demo: <https://awszoabi.github.io/ExamApp/>
-- API health: `REPLACE_ME_API_HEALTH_URL`
-- Kanban board: `REPLACE_ME_KANBAN_URL`
-- GitHub Actions: <https://github.com/AwsZoabi/ExamApp/actions>
-- Demonstration video: `REPLACE_ME_VIDEO_URL`
+- API health (local Docker): <http://localhost:4000/api/health>
+- Planning evidence: [GitHub Issues](https://github.com/AwsZoabi/ExamApp/issues) and the [Git/Kanban/milestone workflow](docs/GIT-WORKFLOW.md)
+- Successful main-branch GitHub Actions run: <https://github.com/AwsZoabi/ExamApp/actions/runs/29342193684>
+- Demonstration guide: [four-minute teacher/student walkthrough](docs/USER-GUIDE.md#short-demonstration-script)
 
 The complete link/evidence checklist is in [SUBMISSION.md](SUBMISSION.md).
 
@@ -46,7 +46,7 @@ The complete link/evidence checklist is in [SUBMISSION.md](SUBMISSION.md).
 - Vitest, Testing Library and Supertest coverage
 - Dockerized client/API/PostgreSQL stack
 - Node gateway, Flask scoring and .NET analytics microservices
-- GitHub Actions validation and Docker Hub publishing
+- GitHub Actions validation and optional Docker Hub publishing
 - VS Code client/server/compound debugging configurations
 
 ## Architecture
@@ -187,7 +187,7 @@ ExamApp-Final/
 ├── microservices/          Node, Flask and .NET services with Compose/tests
 ├── docs/                   Spec, API, UML/ERD/sequences, security and operations
 ├── scripts/                Verification, demo and database evidence scripts
-├── .github/workflows/      CI and Docker image publishing
+├── .github/workflows/      CI, Pages and optional image publishing
 ├── .vscode/                Client/server/full-stack debugging
 ├── docker-compose.yml      Complete local application stack
 ├── docker-compose.prod.yml Published-image deployment model

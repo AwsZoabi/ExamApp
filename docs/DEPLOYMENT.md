@@ -2,8 +2,8 @@
 
 ## GitHub Pages client demo
 
-The public repository deploys the React client to
-<https://awszoabi.github.io/ExamApp/> using `.github/workflows/pages.yml`.
+The public repository includes an official workflow at
+`.github/workflows/pages.yml` targeting <https://awszoabi.github.io/ExamApp/>.
 The workflow deliberately sets `VITE_DATA_SOURCE=mock` and
 `VITE_ROUTER_MODE=hash`, because GitHub Pages is a static host and cannot run the
 Express/PostgreSQL backend. This public demo proves the complete browser
@@ -110,7 +110,7 @@ Apply `database/001_schema.sql` and `database/002_seed.sql` once through the pro
 
 ## Docker Hub and production Compose
 
-The publish workflow creates five images:
+When Docker Hub credentials are configured, the optional publish workflow creates five images:
 
 - `examapp-client`
 - `examapp-server`
@@ -118,10 +118,15 @@ The publish workflow creates five images:
 - `examapp-scoring`
 - `examapp-analytics`
 
-Configure GitHub repository secrets before merging to `main`:
+To enable publishing, configure this GitHub repository variable and secret:
 
-- `DOCKERHUB_USERNAME`
-- `DOCKERHUB_TOKEN`
+- Variable `DOCKERHUB_USERNAME`
+- Secret `DOCKERHUB_TOKEN`
+
+Without both values, the workflow reports that registry publication is disabled
+and skips the publishing matrix successfully. CI builds and smoke-tests the three
+microservice images; the client and API Dockerfiles remain reproducibly buildable
+with the submitted Compose configuration.
 
 Copy `.env.production.example` to an untracked `.env.production`, replace every
 example credential and URL, then validate/pull:
@@ -142,7 +147,7 @@ the manual schema/seed step described above.
 1. Pull request starts client/API lint, tests and builds.
 2. Microservice tests validate Node, Flask and .NET.
 3. Compose integration starts all microservices and runs a smoke test.
-4. Merge/tag on `main` builds SBOM/provenance-enabled images and pushes immutable SHA tags plus `latest`.
+4. With Docker Hub configured, a push to `main` publishes `latest` and `sha-*`; a `v*` tag publishes the version tag and `sha-*`, all with SBOM/provenance metadata.
 5. Deployment host pulls the requested image tag with production Compose.
 
 ## Evidence for the lecturer
@@ -154,7 +159,7 @@ Capture authentic evidence showing:
 - Browser login and teacher/student scenarios
 - PostgreSQL JSONB query output
 - Request logs with request IDs
-- Docker Hub image repositories/tags
+- Docker Hub image repositories/tags, when optional registry publishing is enabled
 - Live deployment URL
 
 Add the real links to `SUBMISSION.md`; do not submit placeholders as evidence.

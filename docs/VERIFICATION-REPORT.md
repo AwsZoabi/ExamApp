@@ -28,8 +28,8 @@ Total automated behavioral tests: **33 passed, 0 failed**.
 The final source audit also confirmed that all JSON files parse, all relative
 Markdown links resolve, and no runtime `.env` files, private keys, token-shaped
 values, stale local paths, unfinished TODO markers, or generated dependency/build
-folders are present. The remaining `REPLACE_ME` fields are deliberate
-student-owned account details and public links documented in `SUBMISSION.md`.
+folders are present. Public documentation contains no placeholder URLs;
+student identity is intentionally reserved for the private LMS cover sheet.
 
 ## End-to-end API smoke test
 
@@ -80,12 +80,13 @@ client demo without requiring the Express API on a static host.
 - Added regression tests for the Gateway script, API payload contracts, and
   result-label grammar.
 
-## Student-owned final evidence
+## Account-owned final evidence
 
 All Compose files were statically validated. The preparation sandbox could not
 control Docker's Windows named pipe, so it could not itself rebuild or launch
 containers. The user-started microservice containers were nevertheless verified
 live through their exposed ports and browser Gateway. Before submission, run the
 complete core Compose build and the supplied smoke scripts from a normal terminal
-with Docker Desktop, then capture authentic evidence and link the real GitHub
-Actions and Docker Hub results in `SUBMISSION.md`.
+with Docker Desktop, then capture any recording requested by the LMS. The
+verified GitHub Actions result is linked in `SUBMISSION.md`; no Docker Hub
+publication is claimed.
