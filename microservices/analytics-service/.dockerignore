@@ -1,0 +1,10 @@
+bin
+obj
+TestResults
+.verify
+.vs
+.vscode
+.git
+.gitignore
+Dockerfile*
+*.md

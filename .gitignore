@@ -1,0 +1,39 @@
+# Dependencies and builds
+node_modules/
+dist/
+coverage/
+bin/
+obj/
+.venv/
+.verify/
+__pycache__/
+*.pyc
+
+# Runtime configuration and data
+.env
+.env.*
+!.env.example
+!.env.production.example
+server/data/runtime-db.json
+*.log
+logs/
+
+# Editors and operating systems
+.idea/
+.DS_Store
+Thumbs.db
+
+# Test and tool caches
+.vite/
+.vitest/
+.pytest_cache/
+.eslintcache
+.npm-cache/
+.pip-cache/
+.dotnet/
+.nuget/
+NuGet/
+
+# Local evidence and recordings
+evidence/private/
+*.mp4

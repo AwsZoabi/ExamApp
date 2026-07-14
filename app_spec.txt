@@ -1,1 +1,56 @@
-This spec file describes the application features and use cases.
+EXAMAPP FINAL PROJECT SPECIFICATION
+===================================
+
+PURPOSE
+ExamApp is a full-stack examination platform for teachers and students. Teachers create, publish and manage multiple-choice exams. Students complete timed exams and receive server-calculated results. Teachers review attempts and class analytics.
+
+USERS
+1. Teacher
+   - Creates and edits exam metadata and questions.
+   - Publishes, closes and deletes exams.
+   - Reviews submissions, average score and pass rate.
+2. Student
+   - Registers or signs in.
+   - Browses open exams.
+   - Completes a timed exam and reviews personal history.
+3. Operator/developer
+   - Runs tests, Docker, PostgreSQL, JSON fallback, microservices and CI/CD.
+
+MAIN PAGES
+- Login and registration
+- Teacher dashboard
+- Exam create/edit page with dynamic question editor
+- Teacher exam results page
+- Student dashboard
+- Timed exam runner
+- Student attempt history and result review
+- Not-found/error routes
+
+MAIN USE CASES
+UC-01 Teacher creates and publishes an exam.
+UC-02 Student completes an open exam and the server calculates the score.
+UC-03 Teacher reviews submissions and analytics.
+
+ARCHITECTURE
+- React/Vite single-page client
+- Express REST API using controllers, services and repositories
+- PostgreSQL 16 with relational entities and JSONB questions/answers
+- Local JSON repository with the same interface for fallback/testing
+- Optional Node gateway, Python Flask scoring and .NET analytics microservices
+- Docker Compose and GitHub Actions CI/CD
+
+SECURITY
+- Bcrypt password hashing
+- Expiring JWT authentication
+- Server-side role/ownership checks
+- Zod input validation, rate limits, CORS and Helmet
+- Parameterized SQL and no committed secrets
+
+DATA MODEL
+- users: identity, email, password hash, role and active state
+- exams: metadata, status and JSONB questions
+- submissions: JSONB answers, score and attempt metadata
+- audit_logs: security/operation events with JSONB metadata
+
+DETAILED SPECIFICATION
+See docs/SPECIFICATION.md, docs/REQUIREMENTS-TRACEABILITY.md, docs/API.md and docs/DIAGRAMS.md.

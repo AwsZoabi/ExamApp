@@ -1,0 +1,80 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "fullName": "Teacher Demo",
+      "email": "teacher@examapp.local",
+      "passwordHash": "$2b$10$MM2lQDrUKWnBlbUr6c6hp.tCicgFXscmRo9zjPaSptvjag8f0a8jG",
+      "role": "teacher",
+      "isActive": true,
+      "createdAt": "2026-06-01T08:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "fullName": "Student Demo",
+      "email": "student@examapp.local",
+      "passwordHash": "$2b$10$MM2lQDrUKWnBlbUr6c6hp.tCicgFXscmRo9zjPaSptvjag8f0a8jG",
+      "role": "student",
+      "isActive": true,
+      "createdAt": "2026-06-01T08:00:00.000Z"
+    }
+  ],
+  "exams": [
+    {
+      "id": 101,
+      "title": "React Basics Exam",
+      "course": "Frontend Development",
+      "description": "Components, props, state, and hooks.",
+      "durationMinutes": 45,
+      "passingScore": 60,
+      "status": "open",
+      "questions": [
+        {"id": 1, "text": "What is a React component?", "answers": ["A reusable UI building block", "A database table", "A CSS file", "A server-only function"], "correctAnswerIndex": 0},
+        {"id": 2, "text": "Which hook manages component state?", "answers": ["useRoute", "useState", "useServer", "useHTML"], "correctAnswerIndex": 1},
+        {"id": 3, "text": "What are props used for?", "answers": ["Passing data to components", "Deleting files", "Changing the browser", "Creating a database"], "correctAnswerIndex": 0}
+      ],
+      "createdBy": 1,
+      "createdAt": "2026-06-01T08:30:00.000Z",
+      "updatedAt": "2026-06-01T08:30:00.000Z"
+    },
+    {
+      "id": 102,
+      "title": "JavaScript Fundamentals",
+      "course": "Web Programming",
+      "description": "Variables, arrays, functions, and objects.",
+      "durationMinutes": 60,
+      "passingScore": 70,
+      "status": "open",
+      "questions": [
+        {"id": 1, "text": "Which keyword declares a block-scoped variable?", "answers": ["table", "let", "style", "page"], "correctAnswerIndex": 1},
+        {"id": 2, "text": "What type does Array.isArray([]) detect?", "answers": ["Array", "Number", "Boolean", "CSS"], "correctAnswerIndex": 0}
+      ],
+      "createdBy": 1,
+      "createdAt": "2026-06-01T08:45:00.000Z",
+      "updatedAt": "2026-06-01T08:45:00.000Z"
+    },
+    {
+      "id": 103,
+      "title": "HTML and CSS Review",
+      "course": "Web Basics",
+      "description": "A closed sample exam for teacher management.",
+      "durationMinutes": 30,
+      "passingScore": 60,
+      "status": "closed",
+      "questions": [
+        {"id": 1, "text": "What does HTML stand for?", "answers": ["HyperText Markup Language", "HighText Machine Language", "Home Tool Markup Language"], "correctAnswerIndex": 0}
+      ],
+      "createdBy": 1,
+      "createdAt": "2026-06-01T09:00:00.000Z",
+      "updatedAt": "2026-06-01T09:00:00.000Z"
+    }
+  ],
+  "submissions": [
+    {"id": 1, "examId": 101, "studentId": 2, "answers": {"1": 0, "2": 1, "3": 0}, "score": 100, "correctAnswers": 3, "totalQuestions": 3, "submittedAt": "2026-06-01T10:00:00.000Z"},
+    {"id": 2, "examId": 102, "studentId": 2, "answers": {"1": 1, "2": 0}, "score": 100, "correctAnswers": 2, "totalQuestions": 2, "submittedAt": "2026-06-02T10:00:00.000Z"},
+    {"id": 3, "examId": 101, "studentId": 2, "answers": {"1": 0, "2": 0, "3": 0}, "score": 67, "correctAnswers": 2, "totalQuestions": 3, "submittedAt": "2026-06-03T10:00:00.000Z"}
+  ],
+  "auditLogs": [
+    {"id": 1, "actorId": 1, "action": "seed.create", "entityType": "exam", "entityId": 101, "requestId": "seed", "metadata": {"source": "db.json"}, "createdAt": "2026-06-01T08:00:00.000Z"}
+  ]
+}

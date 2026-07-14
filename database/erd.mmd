@@ -1,0 +1,51 @@
+erDiagram
+  USERS ||--o{ EXAMS : creates
+  USERS ||--o{ SUBMISSIONS : submits
+  EXAMS ||--o{ SUBMISSIONS : receives
+  USERS ||--o{ AUDIT_LOGS : acts
+
+  USERS {
+    INTEGER id PK
+    VARCHAR full_name
+    VARCHAR email UK
+    VARCHAR password_hash
+    VARCHAR role
+    BOOLEAN is_active
+    TIMESTAMPTZ created_at
+  }
+
+  EXAMS {
+    INTEGER id PK
+    VARCHAR title
+    VARCHAR course
+    TEXT description
+    INTEGER duration_minutes
+    INTEGER passing_score
+    VARCHAR status
+    JSONB questions
+    INTEGER created_by FK
+    TIMESTAMPTZ created_at
+    TIMESTAMPTZ updated_at
+  }
+
+  SUBMISSIONS {
+    INTEGER id PK
+    INTEGER exam_id FK
+    INTEGER student_id FK
+    JSONB answers
+    INTEGER score
+    INTEGER correct_answers
+    INTEGER total_questions
+    TIMESTAMPTZ submitted_at
+  }
+
+  AUDIT_LOGS {
+    INTEGER id PK
+    INTEGER actor_id FK
+    VARCHAR action
+    VARCHAR entity_type
+    INTEGER entity_id
+    VARCHAR request_id
+    JSONB metadata
+    TIMESTAMPTZ created_at
+  }

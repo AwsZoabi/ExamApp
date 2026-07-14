@@ -1,0 +1,15 @@
+{
+  "name": "examapp-gateway",
+  "version": "1.1.0",
+  "private": true,
+  "description": "Native Node.js API gateway and browser dashboard for ExamApp microservices.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "check": "node --check src/app.js && node --check src/server.js",
+    "test": "node --test"
+  }
+}

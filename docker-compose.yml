@@ -1,0 +1,83 @@
+name: examapp-final
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-examapp}
+      POSTGRES_USER: ${POSTGRES_USER:-examapp}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-examapp_dev_only}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+      start_period: 5s
+    networks:
+      - examapp-network
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      SERVER_PORT: 4000
+      DATA_SOURCE: postgres
+      DATABASE_URL: postgresql://${POSTGRES_USER:-examapp}:${POSTGRES_PASSWORD:-examapp_dev_only}@postgres:5432/${POSTGRES_DB:-examapp}
+      DATABASE_SSL: disable
+      JWT_SECRET: ${JWT_SECRET:-local-docker-demo-secret-change-before-deploy}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-8h}
+      ALLOW_TEACHER_REGISTRATION: ${ALLOW_TEACHER_REGISTRATION:-true}
+      CORS_ORIGIN: http://localhost:${CLIENT_PORT:-8080}
+    ports:
+      - "${SERVER_PORT:-4000}:4000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:4000/api/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 4s
+      retries: 12
+      start_period: 10s
+    networks:
+      - examapp-network
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: /api
+        VITE_DATA_SOURCE: api
+    restart: unless-stopped
+    ports:
+      - "${CLIENT_PORT:-8080}:80"
+    depends_on:
+      server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1/health"]
+      interval: 10s
+      timeout: 4s
+      retries: 10
+      start_period: 5s
+    networks:
+      - examapp-network
+
+volumes:
+  postgres_data:
+    name: examapp_final_postgres_data
+
+networks:
+  examapp-network:
+    name: examapp-final-network
+    driver: bridge

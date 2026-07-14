@@ -1,160 +1,49 @@
-import { useState } from 'react';
-import { Link, Navigate, Route, Routes } from 'react-router-dom';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import StudentDashboard from './pages/StudentDashboard';
-import TeacherDashboard from './pages/TeacherDashboard';
-import CreateExam from './pages/CreateExam';
-import EditExam from './pages/EditExam';
-import TakeExam from './pages/TakeExam';
-import { authService } from './services/authService';
-import { configService } from './services/configService';
-import './App.css';
+import { Route, Routes } from 'react-router-dom';
+import { ToastHost } from './components/common/ToastHost';
+import { AppShell } from './components/layout/AppShell';
+import { GuestRoute, ProtectedRoute, RoleHome } from './components/layout/ProtectedRoute';
+import { AuthProvider } from './context/AuthContext';
+import { ExamEditorPage } from './pages/ExamEditorPage';
+import { ExamResultsPage } from './pages/ExamResultsPage';
+import { LoginPage } from './pages/LoginPage';
+import { NotFoundPage } from './pages/NotFoundPage';
+import { RegisterPage } from './pages/RegisterPage';
+import { StudentDashboardPage } from './pages/StudentDashboardPage';
+import { SubmissionResultPage } from './pages/SubmissionResultPage';
+import { TakeExamPage } from './pages/TakeExamPage';
+import { TeacherDashboardPage } from './pages/TeacherDashboardPage';
 
-function App() {
-  const [currentUser, setCurrentUser] = useState(authService.getCurrentUser());
-
-  const handleLogin = (user) => {
-    setCurrentUser(user);
-  };
-
-  const handleLogout = () => {
-    authService.logout();
-    setCurrentUser(null);
-  };
-
+export default function App() {
   return (
-    <>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div className="container">
-          <Link className="navbar-brand" to="/">
-            {configService.appName}
-          </Link>
-
-          <div className="d-flex align-items-center gap-2">
-            {currentUser ? (
-              <>
-                {currentUser.role === 'teacher' && (
-                  <Link className="btn btn-outline-light btn-sm" to="/teacher">
-                    Teacher Dashboard
-                  </Link>
-                )}
-
-                {currentUser.role === 'student' && (
-                  <Link className="btn btn-outline-light btn-sm" to="/student">
-                    Student Dashboard
-                  </Link>
-                )}
-
-                <span className="text-white small">
-                  {currentUser.fullName} ({currentUser.role})
-                </span>
-
-                <button className="btn btn-outline-danger btn-sm" onClick={handleLogout}>
-                  Logout
-                </button>
-              </>
-            ) : (
-              <>
-                <Link className="btn btn-outline-light btn-sm" to="/login">
-                  Login
-                </Link>
-                <Link className="btn btn-success btn-sm" to="/register">
-                  Register
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
-      </nav>
-
+    <AuthProvider>
+      <ToastHost />
       <Routes>
-        <Route
-          path="/"
-          element={
-            currentUser ? (
-              currentUser.role === 'student' ? (
-                <Navigate to="/student" />
-              ) : (
-                <Navigate to="/teacher" />
-              )
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
+        <Route element={<RoleHome />} path="/" />
 
-        <Route
-          path="/login"
-          element={
-            currentUser ? <Navigate to="/" /> : <Login onLogin={handleLogin} />
-          }
-        />
+        <Route element={<GuestRoute />}>
+          <Route element={<LoginPage />} path="/login" />
+          <Route element={<RegisterPage />} path="/register" />
+        </Route>
 
-        <Route
-          path="/register"
-          element={
-            currentUser ? <Navigate to="/" /> : <Register onLogin={handleLogin} />
-          }
-        />
+        <Route element={<ProtectedRoute roles={['teacher']} />}>
+          <Route element={<AppShell />}>
+            <Route element={<TeacherDashboardPage />} path="/teacher" />
+            <Route element={<ExamEditorPage />} path="/teacher/exams/new" />
+            <Route element={<ExamEditorPage />} path="/teacher/exams/:id/edit" />
+            <Route element={<ExamResultsPage />} path="/teacher/exams/:id/results" />
+          </Route>
+        </Route>
 
-        <Route
-          path="/student"
-          element={
-            currentUser && currentUser.role === 'student' ? (
-              <StudentDashboard user={currentUser} />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
+        <Route element={<ProtectedRoute roles={['student']} />}>
+          <Route element={<AppShell />}>
+            <Route element={<StudentDashboardPage />} path="/student" />
+            <Route element={<TakeExamPage />} path="/student/exams/:id/take" />
+            <Route element={<SubmissionResultPage />} path="/student/results/:submissionId" />
+          </Route>
+        </Route>
 
-        <Route
-          path="/student/exam/:id"
-          element={
-            currentUser && currentUser.role === 'student' ? (
-              <TakeExam user={currentUser} />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-
-        <Route
-          path="/teacher"
-          element={
-            currentUser && currentUser.role === 'teacher' ? (
-              <TeacherDashboard user={currentUser} />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-
-        <Route
-          path="/teacher/create"
-          element={
-            currentUser && currentUser.role === 'teacher' ? (
-              <CreateExam />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-
-        <Route
-          path="/teacher/edit/:id"
-          element={
-            currentUser && currentUser.role === 'teacher' ? (
-              <EditExam />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
+        <Route element={<NotFoundPage />} path="*" />
       </Routes>
-    </>
+    </AuthProvider>
   );
 }
-
-export default App;

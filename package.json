@@ -1,0 +1,21 @@
+{
+  "name": "examapp-final",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Professional full-stack examination management platform",
+  "scripts": {
+    "dev:client": "npm --prefix client run dev",
+    "dev:server": "npm --prefix server run dev",
+    "test": "npm --prefix client test -- --run && npm --prefix server test -- --run",
+    "test:coverage": "npm --prefix client run test:coverage && npm --prefix server run test:coverage",
+    "lint": "npm --prefix client run lint && npm --prefix server run lint",
+    "build": "npm --prefix client run build && npm --prefix server run check",
+    "verify": "powershell -ExecutionPolicy Bypass -File ./scripts/verify.ps1",
+    "compose:up": "docker compose up --build --detach --wait",
+    "compose:down": "docker compose down --remove-orphans",
+    "compose:reset": "docker compose down --volumes --remove-orphans"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
